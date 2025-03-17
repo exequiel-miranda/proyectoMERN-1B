@@ -1,16 +1,21 @@
-// Importo todo lo de la libreria express
+// Importo todo lo de la libreria de Express
 import express from "express";
 import productsRoutes from "./src/routes/products.js";
+import customersRoutes from "./src/routes/customers.js";
+import employeeRoutes from "./src/routes/employees.js";
+import branchesRoutes from "./src/routes/branches.js";
 
-// Creo una constante que es igual
-// a la libreria que importé y la ejecuta
+// Creo una constante que es igual a la libreria que importé
 const app = express();
 
-// Uso un middleware para que acepte datos Json
+//Que acepte datos en json
 app.use(express.json());
 
-// Definir la ruta
+// Definir las rutas de las funciones que tendrá la página web
 app.use("/api/products", productsRoutes);
+app.use("/api/customers", customersRoutes);
+app.use("/api/employee", employeeRoutes);
+app.use("/api/branches", branchesRoutes);
 
-// Exporto la constante para poder usar express en otros lados
+// Exporto la constante para poder usar express en otros archivos
 export default app;
