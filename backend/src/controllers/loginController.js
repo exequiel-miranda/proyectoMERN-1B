@@ -47,7 +47,7 @@ loginController.login = async (req, res) => {
 
     // Si no es administrador, validamos la contraseña
     if (userType !== "Admin") {
-      const isMatch = bcryptjs.compare(password, userFound.password);
+      const isMatch = await bcryptjs.compare(password, userFound.password);
       if (!isMatch) {
         return res.json({ message: "Invalid password" });
       }
@@ -66,6 +66,7 @@ loginController.login = async (req, res) => {
         if (error) console.log(error);
 
         res.cookie("authToken", token);
+        res.json({ message: "login successful" });
       }
     );
   } catch (error) {
