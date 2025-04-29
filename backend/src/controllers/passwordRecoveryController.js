@@ -1,4 +1,4 @@
-import jsonwebtoken from "jsonwebtoken"; //Token
+import jsonwebtoken, { decode } from "jsonwebtoken"; //Token
 import bcryptjs from "bcryptjs"; //Encriptar
 
 import clientsModel from "../models/customers.js";
@@ -93,6 +93,51 @@ passwordRecoveryController.verifyCode = async (req, res) => {
     res.cookie("tokenRecoveryCode", newToken, { maxAge: 25 * 60 * 1000 });
 
     res.json({ message: "Code verified successfully" });
+  } catch (error) {
+    console.log("error" + error);
+  }
+};
+
+passwordRecoveryController.newPassword = async (req, res) => {
+  const { newPassword } = req.body;
+
+  try {
+    //Acceder el token que está en las cookies
+    const token = req.cookies.tokenRecoveryCode;
+
+    //decodificar el token
+    const decoded = jsonwebtoken.verify(token, config.JWT.secret);
+
+    //Ver si el codigo ya fue verificado
+    if (!decoded.verfied) {
+      return res.json({ message: "Code not verified" });
+    }
+
+    let user;
+
+    const { email } = decoded;
+
+    // Encriptar la contraseña
+    const hashedPassword = await bcryptjs.hash(newPassword, 10);
+
+    //Guardamos la nueva contraseña en la base de datos
+    if (decoded.userType === "client") {
+      user = await clientsModel.findOneAndUpdate(
+        { email },
+        { password: hashedPassword },
+        { new: true }
+      );
+    } else if (decoded.userType === "employee") {
+      user = await employeeModel.findOneAndUpdate(
+        { email },
+        { password: hashedPassword },
+        { new: true }
+      );
+    }
+
+    res.clearCookie("tokenRecoveryCode");
+
+    res.json({ message: "Passsword updated" });
   } catch (error) {
     console.log("error" + error);
   }
