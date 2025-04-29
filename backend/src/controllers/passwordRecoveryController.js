@@ -57,3 +57,45 @@ passwordRecoveryController.requestCode = async (req, res) => {
     console.log("error" + error);
   }
 };
+
+///////// VERIFICAR EL CÓDIGO QUE ME ENVIARON POR CORREO
+passwordRecoveryController.verifyCode = async (req, res) => {
+  const { code } = req.body;
+
+  try {
+    // Obtener el token que esta guardado en las cookies
+    const token = req.cookies.tokenRecoveryCode;
+
+    // Extraer todos los datos del token
+    const decoded = jsonwebtoken.verify(token, config.JWT.secret);
+
+    // Comparar el código que está guardado en el token
+    // con el código que el usuario escribió
+    if (decoded.code !== code) {
+      return res.json({ message: "Invalid code" });
+    }
+
+    //Marcamos el token como verificado (si es correcto)
+    const newToken = jsonwebtoken.sign(
+      //1- ¿Que vamos a guardar?
+      {
+        email: decoded.email,
+        code: decoded.code,
+        userType: decoded.userType,
+        verfied: true,
+      },
+      //2- secret key
+      config.JWT.secret,
+      //3- ¿cuando vence?
+      { expiresIn: "25m" }
+    );
+
+    res.cookie("tokenRecoveryCode", newToken, { maxAge: 25 * 60 * 1000 });
+
+    res.json({ message: "Code verified successfully" });
+  } catch (error) {
+    console.log("error" + error);
+  }
+};
+
+export default passwordRecoveryController;
