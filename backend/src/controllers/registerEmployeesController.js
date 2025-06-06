@@ -50,11 +50,12 @@ registerEmployeesController.register = async (req, res) => {
 
     await newEmployee.save();
 
+    const userType = "Employee";
     // Generar un token que valide que ya estoy registrado
     // y puedo acceder a todas las paginas
     jsonwebtoken.sign(
       // 1 - que voy a guardar
-      { id: newEmployee._id },
+      { id: newEmployee._id, userType },
       // 2- Clave secreta
       config.JWT.secret,
       // 3- cuando expira

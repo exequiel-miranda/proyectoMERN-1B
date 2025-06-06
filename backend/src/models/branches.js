@@ -34,7 +34,7 @@ const branchesSchema = new Schema(
     telephone: {
         type: Number,
         require: true,
-        min: 8,
+    
       },
 
      
