@@ -23,14 +23,21 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Definir las rutas de las funciones que tendrá la página web
-app.use("/api/products", validateAuthToken(["Employee"]), productsRoutes);
+app.use("/api/products", productsRoutes);
 app.use("/api/customers", customersRoutes);
-app.use("/api/employee",validateAuthToken(["cliente", "Admin"]), employeeRoutes);
+app.use("/api/employee",
+  validateAuthToken(["cliente", "Admin"]),
+  employeeRoutes
+);
 app.use("/api/branches", branchesRoutes);
 app.use("/api/reviews", reviewsRoutes);
 
-app.use("/api/registerEmployees",validateAuthToken(["admin"]), registerEmployeesRoutes);
-app.use("/api/login",  loginRoutes);
+app.use(
+  "/api/registerEmployees",
+  validateAuthToken(["admin"]),
+  registerEmployeesRoutes
+);
+app.use("/api/login", loginRoutes);
 app.use("/api/logout", logoutRoutes);
 
 app.use("/api/registerClients", registerClients);

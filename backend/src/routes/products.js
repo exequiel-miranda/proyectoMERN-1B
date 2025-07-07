@@ -11,6 +11,7 @@ router
 
 router
   .route("/:id")
+  .get(productsController.getSingleProduct)
   .put(productsController.updateProducts)
   .delete(productsController.deleteProducts);
 

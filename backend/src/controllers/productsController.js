@@ -44,4 +44,12 @@ productsController.updateProducts = async (req, res) => {
   res.json({ message: "product updated" });
 };
 
+productsController.getSingleProduct = async (req, res) => {
+  const product = await productsModel.findById(req.params.id);
+  if (!product) {
+    return res.status(404).json({ message: "Producto no encontrado" });
+  }
+  res.json(product);
+};
+
 export default productsController;
