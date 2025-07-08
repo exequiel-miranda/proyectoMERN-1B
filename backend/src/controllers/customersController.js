@@ -8,6 +8,16 @@ customersController.getcustomers = async (req, res) => {
   res.json(customers);
 };
 
+//SELECT BY ID
+customersController.getcustomersById = async (req, res) => {
+  const customers = await customersModel.findById(req.params.id);
+  if (!customers) {
+    return res.status(404).json({ message: "customer dont find" });
+  }
+  res.json(customers);
+};
+
+
 // INSERT
 customersController.createcustomers = async (req, res) => {
   const { name, lastName, birthday, email, password, telephone, dui } = req.body;
