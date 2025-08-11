@@ -5,7 +5,7 @@ import blogController from "../controllers/blogController.js";
 const router = express.Router();
 
 //Configurar una carpeta en local que guarde las imagenes
-const upload = multer({ dest: "public/" });
+const upload = multer({ dest: "public/images" });
 
 router
   .route("/")

@@ -11,7 +11,7 @@ router
   .route("/:id")
   .delete(salesController.deleteSales)
   .put(salesController.updateSales);
-  .get/()
+
 
 router.route("/sales-by-category")
 .get(salesController.getSalesByCategory);

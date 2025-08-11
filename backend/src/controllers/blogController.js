@@ -29,7 +29,7 @@ blogController.createPost = async (req, res) => {
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "public",
-        allowed_formats: ["jpg", "png", "jpeg"],
+        allowed_formats: ["pdf"],
       });
       imageUrl = result.secure_url;
     }
